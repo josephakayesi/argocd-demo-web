@@ -30,7 +30,7 @@ func main() {
 
 	// Parse all templates in the views folder
 	tmpl := template.Must(template.ParseGlob("views/*.html"))
-	version := "0.0.3"
+	version := "0.0.4"
 
     app := fiber.New(fiber.Config{
         Views: &TemplateEngine{
@@ -48,7 +48,7 @@ func main() {
 
 	app.Get("/api", func(c *fiber.Ctx) error {
 		uptime := time.Since(startTime).Round(time.Second) // rounded for readability
-		
+
 		return c.JSON(fiber.Map{
 			"success": true,
 			"version": fmt.Sprintf("v%s", version),
