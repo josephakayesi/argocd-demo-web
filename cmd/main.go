@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"html/template"
 	"io"
+	"os"
 	"time"
 
 	"github.com/gofiber/fiber/v2"
@@ -26,7 +27,11 @@ func (t *TemplateEngine) Load() error {
 
 
 func main() {
-		startTime := time.Now()
+	podName := os.Getenv("POD_NAME")
+	if podName == "" {
+		podName = "unknown-pod"
+	}
+	startTime := time.Now()
 
 	// Parse all templates in the views folder
 	tmpl := template.Must(template.ParseGlob("views/*.html"))
@@ -41,6 +46,7 @@ func main() {
 	 app.Get("/", func(c *fiber.Ctx) error {
         return c.Render("index.html", fiber.Map{
 			"Version": version,
+			"PodName": podName,
         })
     })
 
@@ -54,6 +60,7 @@ func main() {
 			"version": fmt.Sprintf("v%s", version),
 			"message": "server up and running",
 			"uptime":  uptime.String(),
+			"pod_name": podName,
 		})
 	})
 
